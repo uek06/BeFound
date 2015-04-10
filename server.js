@@ -1,5 +1,4 @@
 // SERVEUR NODE JS
-//test git2
 
 //On importe les modules express et path nécessaires
 var express = require('express');
@@ -9,7 +8,7 @@ var path = require('path');
 var app = express();
 
 //On importe le fichier de jeu js
-var game = require('./game');
+var game = require('./host');
 
 //On dit à l'application express d'utiliser les fichiers du répertoire racine
 app.use(express.static(__dirname));
@@ -25,5 +24,5 @@ var io = require('socket.io').listen(server);
 // Quand un client se connecte on lance la fonction initGame
 io.sockets.on('connection', function (socket) {
     // On envoie le serveur et la socket
-    game.initGame(io, socket);
+    game.initApp(io, socket);
 });

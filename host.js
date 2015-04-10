@@ -1,4 +1,4 @@
-// Le serveur
+// Le serveur lol
 var io;
 // La socket du client
 var clientSocket;

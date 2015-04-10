@@ -1,5 +1,5 @@
 // SERVEUR NODE JS
-//test git
+//test git2
 
 //On importe les modules express et path nécessaires
 var express = require('express');

@@ -81,7 +81,7 @@ addPseudoInDB = function(pseudo) {
     var client = new pg.Client(params);
     client.connect();
 
-    var query = client.query("INSERT INTO \"User\" VALUES('"+pseudo+"')");
+    var query = client.query("INSERT INTO \"User\" (name) VALUES('"+pseudo+"')");
 };
 
 /**

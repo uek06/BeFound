@@ -77,76 +77,9 @@ var App = {
     //initialise les différents listeners qui vont écouter les évènements émis par le serveur socket
     //puis lance la fonction appropriée
     initListeners: function () {
-        App.$doc.on('click', '#btnConnect', App.Player.onPlayerConnect);
-    },
-
-
-    Host: {
-
-        //contient les infos des différents players
-        players: [],
-
-        //nombre de joueurs qui ont rejoint la room
-        nbPlayersInRoom: 0,
-
-        //lance la room de l'host
-        //data est de la forme {{ roomId, mySocketId }}
-        gameInit: function (data) {
-            App.roomId = data.roomId;
-            App.mySocketId = data.mySocketId;
-            App.Host.nbPlayersInRoom = 0;
-        },
-
-        //met à jour l'écran d'attente de l'host
-        //data contient le room id et le pseudo
-        updateWaitingScreen: function (data) {
-            //on stocke les informations du player
-            App.Host.players.push(data);
-            //on incrémente le nb de joueurs dans la room
-            App.Host.nbPlayersInRoom += 1;
-            //si le nb de joueur correspond au nb voulu
-            if (App.Host.nbPlayersInRoom === nbPlayers) {
-                // on envoie un event au serveur avec le gameId pour lui dire que la room est full
-                IO.socket.emit('hostRoomFull', App.roomId);
-            }
-        },
-    },
-
-    Player: {
-            // l'id socket de l'host
-            hostSocketId: '',
-
-            // le pseudo du player
-            pseudo: '',
-
-
-            //quand le joueur clique sur commencer sur son mobile, après avoir rentré son pseudo et l'id de la room
-            onPlayerConnect: function () {
-                //on collecte les infos à envoyer au serveur
-                var data = {
-                    //pseudo: $('#inputPseudo').val() || 'Anonyme'
-                };
-                //on envoie donc la room id et le pseudo au serveur
-                IO.socket.emit('playerJoinRoom', data);
-
-                //et on sauvegarde les infos du player
-                App.Player.pseudo = data.pseudo;
-            },
-
-
-            //confirme que au joueur qu'il s'est bien connecté à la room
-            updateWaitingScreen: function (data) {
-                if (IO.socket.socket.sessionid === data.mySocketId) {
-                    App.roomId = data.roomId;
-
-                    $('#playerWaitingMessage')
-                    .append('<p/>')
-                    .text('VOUS AVEZ REJOINT LE JEU NUMERO ' + data.roomId + '. ATTENDEZ QUE LE JEU COMMENCE');
-                }
-            }
-        }
-
-    };
+        App.$doc.on('click', '#btnConnect', alert("moncul"));
+    }
+};
 
     IO.init();
     App.init();

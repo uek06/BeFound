@@ -80,6 +80,7 @@ var App = {
      * @param data Données sur les utilisateurs
      */
     showUserList : function(data) {
+        alert("Je suis appelé");
         if (data.connected)
             $('#userList').append(
                 '<a role="button" id="' + data.name+'">' +

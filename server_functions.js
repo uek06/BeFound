@@ -5,7 +5,7 @@ var clientSocket;
 var pg = require('pg');
 
 // Tableau des utilisateurs inscrits à l'évènement
-var users = [];
+users = [];
 
 //valeur actuelle de mouvement pour savoir si l'utilisateur est connecté
 var actualValue=0;
@@ -18,7 +18,6 @@ exports.initApp = function (paramIO, paramSocket) {
     clientSocket = paramSocket;
     clientSocket.emit('connected');
     // On écoute les évenements de l'host
-    clientSocket.on('getDataBase', getDataBase);
     clientSocket.on('recupPseudos', recupPseudos);
     clientSocket.on('lost',lost);
 
@@ -49,10 +48,10 @@ recupPseudos = function(pseudo) {
     var client = new pg.Client(params);
     client.connect();
 
-    var query = client.query("SELECT name FROM \"User\"");
+    var query = client.query("SELECT * FROM \"User\"");
 
     query.on('row', function (row) {
-        users.push(row.name);
+        users.push(row);
     });
 
     setTimeout(function() {checkPseudo(pseudo)},2500);
@@ -69,10 +68,20 @@ checkPseudo = function(pseudo) {
     var isAlreadyChosen = false;
     for (var i=0; i<users.length; i++) {
         // Si il existe déjà
-        if (users[i] == pseudo) isAlreadyChosen = true;
+        if (users[i].name == pseudo) isAlreadyChosen = true;
     }
-    if (!isAlreadyChosen) addPseudoInDB(pseudo);
-    setTimeout(function() {io.sockets.emit("alreadyChosen",isAlreadyChosen); },5000);
+    if (!isAlreadyChosen) {
+        // On crée une room avec comme identifiant le pseudo de l'utilisateur
+        clientSocket.join(pseudo);
+        addPseudoInDB(pseudo);
+        // Affichage pour soi
+        io.sockets.in(pseudo).emit("firstDisplay",users);
+        // Création des listeners
+        for (var i=0; i<users.length; i++) io.sockets.in(pseudo).emit("createListener",users[i].name);
+        // Affichage pour les autres
+        clientSocket.broadcast.emit('updateDisplay',pseudo);
+    }
+    else io.sockets.emit("alreadyChosen");
     users = [];
 };
 
@@ -90,29 +99,4 @@ addPseudoInDB = function(pseudo) {
     client.connect();
 
     var query = client.query("INSERT INTO \"User\" (name) VALUES('"+pseudo+"')");
-};
-
-/**
- * Permet de récupérer les noms des utilisateurs et demande au client
- * de les afficher
- */
-getDataBase = function() {
-
-    var params = {
-        host: 'ec2-54-163-225-82.compute-1.amazonaws.com',
-        user: 'yaedbmcycdqwmw',
-        password: 'Ka-ojSGHcdGx_55g8V7gDoG3Iw',
-        database: 'dlk8867oe0a8d',
-        ssl: true
-    };
-
-    var client = new pg.Client(params);
-    client.connect();
-
-    var query = client.query("SELECT * FROM \"User\"");
-
-    query.on('row', function (row) {
-        io.sockets.emit('dataSent',row);
-    });
-
 };

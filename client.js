@@ -1,3 +1,4 @@
+
 // Tout le code qui concerne les connections socket
 var IO = {
 
@@ -12,9 +13,11 @@ var IO = {
     initListeners: function () {
         IO.socket.on('connected', IO.onConnected);
         IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
-        IO.socket.on('dataSent', App.showUserList);
         IO.socket.on('alreadyChosen', App.alreadyChosen);
         IO.socket.on('messageAlert', App.messageAlert);
+        IO.socket.on('updateDisplay',App.updateDisplay);
+        IO.socket.on('firstDisplay',App.firstDisplay);
+        IO.socket.on('createListener',App.createListener);
     },
 
     /**
@@ -66,36 +69,6 @@ var App = {
         App.getPseudoInForm();
     },
 
-    /**
-     * Va afficher tout les utilisateurs utilisant l'application.
-     *
-     * @param data Données sur les utilisateurs
-     */
-    showUserList : function(data) {
-        if (data.connected)
-            $('#userList').append(
-                '<a role="button">' +
-                '<div class="row">' +
-                '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
-                '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                '<button id="'+data.name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
-                '<div class="col-md-4"><h2><span class="label label-success">Connecté <div class="glyphicon glyphicon-ok"></div></span></h2></div>' +
-                '</div>' +
-                '</a>');
-        else {
-            $('#userList').append(
-                '<a role="button">' +
-                '<div class="row">' +
-                '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
-                '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                '<button id="'+data.name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
-                '<div class="col-md-4"></div>' +
-                '</div>' +
-                '</a>');
-        }
-        App.$doc.on('click', '#'+data.name, function(){App.onUser(data.name)});
-    },
-
 
     /**
      * Récupère le pseudo entré par l'utilisateur.
@@ -118,13 +91,57 @@ var App = {
      *
      * @param isAlreadyChosen Boolean dont la valeur est définie dans le serveur
      */
-    alreadyChosen : function(isAlreadyChosen) {
-        if(isAlreadyChosen)
-            $("#alreadyChosen").text("Ce pseudo est déjà pris !");
-        else {
-            App.$main.html(App.$templateList);
-            IO.socket.emit('getDataBase');
+    alreadyChosen : function() {
+        $("#alreadyChosen").text("Ce pseudo est déjà pris !");
+    },
+
+
+    updateDisplay : function(pseudo) {
+        $('#userList').append(
+            '<a role="button">' +
+            '<div class="row">' +
+            '<div style="text-align:center" class="col-md-4"><h2>' + pseudo + '</h2></div>' +
+            '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+            '<button id="'+ pseudo +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+            '<div class="col-md-4"></div>' +
+            '</div>' +
+            '</a>');
+        App.createListener(pseudo);
+    },
+
+
+    firstDisplay : function(users) {
+        App.$main.html(App.$templateList);
+        for (var i=0; i<users.length; i++) {
+            if (users[i].connected) {
+                $('#userList').append(
+                    '<a role="button">' +
+                    '<div class="row">' +
+                    '<div style="text-align:center" class="col-md-4"><h2>' + users[i].name + '</h2></div>' +
+                    '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                    '<button id="' + users[i].name + '" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                    '<div class="col-md-4"><h2><span class="label label-success">Connecté <div class="glyphicon glyphicon-ok"></div></span></h2></div>' +
+                    '</div>' +
+                    '</a>');
+            }
+            else {
+                $('#userList').append(
+                    '<a role="button">' +
+                    '<div class="row">' +
+                    '<div style="text-align:center" class="col-md-4"><h2>' + users[i].name + '</h2></div>' +
+                    '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                    '<button id="'+ users[i].name +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                    '<div class="col-md-4"></div>' +
+                    '</div>' +
+                    '</a>');
+            }
         }
+    },
+
+
+    createListener : function(pseudo) {
+        // Ajout du listener
+        App.$doc.on('click', '#'+pseudo, function() {App.onUser(pseudo)});
     }
 
 };

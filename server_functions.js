@@ -7,6 +7,9 @@ var pg = require('pg');
 // Tableau des utilisateurs inscrits à l'évènement
 var users = [];
 
+//valeur actuelle de mouvement pour savoir si l'utilisateur est connecté
+var actualValue=0;
+
 // Fonction appellée par server.js pour initialiser le jeu
 // exports sert à pouvoir utiliser cette fonction dans un autre fichier (en l'occurence server.js ici)
 exports.initApp = function (paramIO, paramSocket) {
@@ -17,9 +20,14 @@ exports.initApp = function (paramIO, paramSocket) {
     // On écoute les évenements de l'host
     clientSocket.on('getDataBase', getDataBase);
     clientSocket.on('recupPseudos', recupPseudos);
+    clientSocket.on('lost',lost);
 
     // On écoute les évenements du player
     //clientSocket.on('playerJoinRoom', playerJoinRoom);
+};
+
+lost = function(){
+    io.sockets.emit('messageAlert');
 };
 
 
@@ -64,7 +72,7 @@ checkPseudo = function(pseudo) {
         if (users[i] == pseudo) isAlreadyChosen = true;
     }
     if (!isAlreadyChosen) addPseudoInDB(pseudo);
-    io.sockets.emit("alreadyChosen",isAlreadyChosen);
+    setTimeout(function() {io.sockets.emit("alreadyChosen",isAlreadyChosen); },5000);
     users = [];
 };
 

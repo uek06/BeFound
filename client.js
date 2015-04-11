@@ -14,6 +14,7 @@ var IO = {
         IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
         IO.socket.on('dataSent', App.showUserList);
         IO.socket.on('alreadyChosen', App.alreadyChosen);
+        IO.socket.on('messageAlert', App.messageAlert);
     },
 
     /**
@@ -54,13 +55,6 @@ var App = {
         App.$templateList = $('#templateList').html();
     },
 
-    //initialise les différents listeners pour les users
-    initListeners: function () {
-        $(".user").each(function() {
-            App.$doc.on('click', '#'+$(this).text(), function(){App.onUser($(this).text())});
-        });
-    },
-
     onUser: function(pseudo){
         alert('ok '+pseudo);
     },
@@ -78,7 +72,28 @@ var App = {
      * @param data Données sur les utilisateurs
      */
     showUserList : function(data) {
-        $('#userList').append('<div class="user" id="'+data.name+'">'+data.name+' connecté ? '+data.connected+'</div>');
+        if (data.connected)
+            $('#userList').append(
+                '<a role="button">' +
+                '<div class="row">' +
+                '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
+                '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                '<button id="'+data.name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                '<div class="col-md-4"><h2><span class="label label-success">Connecté <div class="glyphicon glyphicon-ok"></div></span></h2></div>' +
+                '</div>' +
+                '</a>');
+        else {
+            $('#userList').append(
+                '<a role="button">' +
+                '<div class="row">' +
+                '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
+                '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                '<button id="'+data.name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                '<div class="col-md-4"></div>' +
+                '</div>' +
+                '</a>');
+        }
+        App.$doc.on('click', '#'+data.name, function(){App.onUser(data.name)});
     },
 
 
@@ -88,6 +103,10 @@ var App = {
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
         IO.socket.emit('recupPseudos',pseudo);
+    },
+
+    messageAlert : function(){
+        alert("DKSNNDFKJDSBFKDSJFSK/HFDHJSknbn");
     },
 
 
@@ -105,7 +124,6 @@ var App = {
         else {
             App.$main.html(App.$templateList);
             IO.socket.emit('getDataBase');
-            setTimeout(App.initListeners,5000);
         }
     }
 

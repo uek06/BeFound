@@ -53,7 +53,7 @@ checkPseudo = function(pseudo) {
 
 };
 
-viewDataBase = function() {
+getDataBase = function() {
 
     var params = {
         host: 'ec2-54-163-225-82.compute-1.amazonaws.com',

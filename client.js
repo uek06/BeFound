@@ -1,5 +1,4 @@
 
-
 // Tout le code qui concerne les connections socket
 var IO = {
 
@@ -82,7 +81,7 @@ var App = {
         else {
             App.initListeners();
             App.$main.html(App.$templateList);
-            IO.socket.emit('viewDataBase');
+            IO.socket.emit('getDataBase');
         }
     }
 

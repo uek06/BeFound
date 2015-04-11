@@ -47,8 +47,29 @@ var IO = {
     //data contient le pseudo
     playerJoinedRoom: function (data) {
         App.$main.html(App.$templateList);
-        //App[App.myRole].updateWaitingScreen(data);
+
+        var pg = require('pg');
+
+        var params = {
+            host: 'ec2-107-20-159-103.compute-1.amazonaws.com',
+            user: 'ddvudgojlealkl',
+            password: 'M7RFqcWBY4ZLlQVui-nku-dA2i',
+            database: 'd3j1bl9lkitr93',
+            ssl: true
+        };
+
+        var client = new pg.Client(params);
+        client.connect();
+
+        var query = client.query("SELECT name FROM \"User\"");
+
+        query.on('row', function (row) {
+            alert(JSON.stringify(row));
+            //$('#id').text()
+        });
     },
+
+
 
     //le serveur nous confirme que tout le monde a rejoint la room, on lance le compte à rebour
     // (en fonction du role cad host ou player)

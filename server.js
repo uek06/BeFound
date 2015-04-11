@@ -8,14 +8,13 @@ var path = require('path');
 var app = express();
 
 //On importe le fichier de jeu js
-var game = require('./host');
+var server_functions = require('./server_functions');
 
 //On dit à l'application express d'utiliser les fichiers du répertoire racine
 app.use(express.static(__dirname));
 
 // On crée un serveur http basé sur node js, sur le port 8080
 var server = require('http').createServer(app).listen(process.env.PORT || 8080);
-//var server = app.listen(process.env.PORT || 8080);
 
 // On crée un serveur socket io et on l'attache au serveur node
 var io = require('socket.io').listen(server);
@@ -24,5 +23,5 @@ var io = require('socket.io').listen(server);
 // Quand un client se connecte on lance la fonction initGame
 io.sockets.on('connection', function (socket) {
     // On envoie le serveur et la socket
-    game.initApp(io, socket);
+    server_functions.initApp(io, socket);
 });

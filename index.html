@@ -30,7 +30,7 @@
                     <img src="images/BeFound.png" class="img-responsive center-block" />
                 </div>
                 <div class="modal-header">
-                    <h1 class="text-center">Enter your pseudo</h1>
+                    <h1 id="alreadyChosen" class="text-center">Enter your pseudo</h1>
                 </div>
                 <div class="modal-body">
                     <form class="form col-md-12 center-block">
@@ -51,9 +51,7 @@
 
 <!-- liste des clients -->
 <script id="templateList" type="text/template">
-
-
-
+    <div id="userList"></div>
 </script>
     <!-- script references -->
     <script src="/socket.io/socket.io.js"></script>

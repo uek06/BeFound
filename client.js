@@ -14,6 +14,8 @@ var IO = {
     initListeners: function () {
         IO.socket.on('connected', IO.onConnected);
         IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
+        IO.socket.on('dataSent', App.showUserList);
+        IO.socket.on('alreadyChosen', App.alreadyChosen);
     },
 
     /**
@@ -28,26 +30,6 @@ var IO = {
     //data contient le pseudo
     playerJoinedRoom: function (data) {
         App.$main.html(App.$templateList);
-
-        var pg = require('pg');
-
-        var params = {
-            host: 'ec2-107-20-159-103.compute-1.amazonaws.com',
-            user: 'ddvudgojlealkl',
-            password: 'M7RFqcWBY4ZLlQVui-nku-dA2i',
-            database: 'd3j1bl9lkitr93',
-            ssl: true
-        };
-
-        var client = new pg.Client(params);
-        client.connect();
-
-        var query = client.query("SELECT name FROM \"User\"");
-
-        query.on('row', function (row) {
-            alert(JSON.stringify(row));
-            //$('#id').text()
-        });
     }
 };
 
@@ -63,7 +45,7 @@ var App = {
     init: function () {
         App.initVariables();
         App.$main.html(App.$templateMenu);
-        App.initListeners();
+        App.$doc.on('click', '#btnConnect', App.onButtonConnect);
     },
 
     //initialise les variables utilisées pour définir les différents templates
@@ -77,8 +59,33 @@ var App = {
     //initialise les différents listeners qui vont écouter les évènements émis par le serveur socket
     //puis lance la fonction appropriée
     initListeners: function () {
-        App.$doc.on('click', '#btnConnect', alert("moncul"));
+
+    },
+
+    onButtonConnect : function() {
+        App.getPseudoInForm();
+    },
+
+    showUserList : function(data) {
+        var contenu = $('#userList').text();
+        $('#userList').html(contenu + "<div id=\""+data.name+"\">"+data.name+"</div>");
+    },
+
+    getPseudoInForm : function() {
+        var pseudo = $('#inputPseudo').val();
+        IO.socket.emit('recupPseudos',pseudo);
+    },
+
+    alreadyChosen : function(isAlreadyChosen) {
+        if(isAlreadyChosen)
+            $("#alreadyChosen").text("Ce pseudo est déjà pris !");
+        else {
+            App.initListeners();
+            App.$main.html(App.$templateList);
+            IO.socket.emit('viewDataBase');
+        }
     }
+
 };
 
     IO.init();

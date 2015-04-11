@@ -63,10 +63,26 @@ checkPseudo = function(pseudo) {
         // Si il existe déjà
         if (users[i] == pseudo) isAlreadyChosen = true;
     }
+    if (!isAlreadyChosen) addPseudoInDB(pseudo);
     io.sockets.emit("alreadyChosen",isAlreadyChosen);
     users.flush();
 };
 
+
+addPseudoInDB = function(pseudo) {
+    var params = {
+        host: 'ec2-54-163-225-82.compute-1.amazonaws.com',
+        user: 'yaedbmcycdqwmw',
+        password: 'Ka-ojSGHcdGx_55g8V7gDoG3Iw',
+        database: 'dlk8867oe0a8d',
+        ssl: true
+    };
+
+    var client = new pg.Client(params);
+    client.connect();
+
+    var query = client.query("INSERT INTO \"User\" VALUES('"+pseudo+"')");
+};
 
 /**
  * Permet de récupérer les noms des utilisateurs et demande au client

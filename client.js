@@ -58,15 +58,19 @@ var App = {
     //initialise les différents listeners pour les users
     initListeners: function () {
         $(".user").each(function() {
-            App.$doc.on('click', '#Ugo', App.onButtonConnect($(this).text()));
+            App.$doc.on('click', '#'+$(this).text(), function(){App.onUser($(this).text())});
         });
+    },
+
+    onUser: function(pseudo){
+        alert('ok '+pseudo);
     },
 
     /**
      * Méthode appelée lorsque l'on appui sur le bouton de connection.
      */
-    onButtonConnect : function(pseudo) {
-        //alert(pseudo);
+    onButtonConnect : function() {
+        App.getPseudoInForm();
     },
 
     /**
@@ -75,8 +79,7 @@ var App = {
      * @param data Données sur les utilisateurs
      */
     showUserList : function(data) {
-        var contenu = $('#userList').text();
-        $('#userList').html(contenu + '<div class="user" id="'+data.name+'">'+data.name+'</div>');
+        $('#userList').append('<div class="user" id="'+data.name+'">'+data.name+'</div>');
     },
 
 
@@ -101,9 +104,9 @@ var App = {
         if(isAlreadyChosen)
             $("#alreadyChosen").text("Ce pseudo est déjà pris !");
         else {
-            App.initListeners();
             App.$main.html(App.$templateList);
             IO.socket.emit('getDataBase');
+            setTimeout(App.initListeners,2500);
         }
     }
 

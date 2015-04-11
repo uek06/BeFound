@@ -1,4 +1,3 @@
-
 // Tout le code qui concerne les connections socket
 var IO = {
 
@@ -15,13 +14,12 @@ var IO = {
         IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
         IO.socket.on('dataSent', App.showUserList);
         IO.socket.on('alreadyChosen', App.alreadyChosen);
-        IO.socket.on('messageAlert', App.messageAlert);
     },
 
     /**
      * The client is successfully connected!
      */
-     onConnected: function () {
+    onConnected: function () {
         // Cache a copy of the client's socket.IO session ID on the App
         App.mySocketId = IO.socket.socket.sessionid;
     },
@@ -80,41 +78,16 @@ var App = {
      * @param data Données sur les utilisateurs
      */
     showUserList : function(data) {
-        alert("Je suis appelé");
-        if (data.connected)
-            $('#userList').append(
-                '<a role="button" id="' + data.name+'">' +
-                    '<div class="row">' +
-                        '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
-                        '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                            '<button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
-                        '<div class="col-md-4"><h2><span class="label label-success">Connecté <div class="glyphicon glyphicon-ok"></div></span></h2></div>' +
-                    '</div>' +
-                '</a>');
-        else {
-            $('#userList').append(
-                '<a role="button" id="' + data.name+'">' +
-                    '<div class="row">' +
-                        '<div style="text-align:center" class="col-md-4"><h2>' + data.name + '</h2></div>' +
-                        '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                            '<button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
-                        '<div class="col-md-4"></div>' +
-                    '</div>' +
-                '</a>');
-        }
+        $('#userList').append('<div class="user" id="'+data.name+'">'+data.name+' connecté ? '+data.connected+'</div>');
     },
 
 
     /**
      * Récupère le pseudo entré par l'utilisateur.
-    */
+     */
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
         IO.socket.emit('recupPseudos',pseudo);
-    },
-
-    messageAlert : function(){
-        alert("DKSNNDFKJDSBFKDSJFSK/HFDHJSknbn");
     },
 
 
@@ -138,12 +111,5 @@ var App = {
 
 };
 
-    IO.init();
-    App.init();
-
-function lostHandler(e){
-    IO.socket.emit('lost');
-}
-
-//register listener
-navigator.wakeLock.onlost = lostHandler;
+IO.init();
+App.init();

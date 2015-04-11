@@ -1,28 +1,31 @@
 {
-"name": "BeFound",
-"version": "0.0.1",
-"description": "BeFound Project",
-"main": "index.html",
-"scripts": {
-"start": "node server.js"
-},
-"dependencies": {
-  "pg": "4.x",
-  "cool-ascii-faces": "~1.3.x",
-"express": "~4.9.x",
-"socket.io":"0.9"
-},
-"engines": {
-"node": "0.10.x"
-},
-"repository": {
-"type": "git",
-"url": "https://github.com/uek06/BeFound"
-},
-"keywords": [
-"node",
-"heroku",
-"express"
-],
-"license": "BeFound"
+  "name": "BeFound",
+  "version": "0.0.1",
+  "description": "BeFound Project",
+  "main": "index.html",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "pg": "4.x",
+    "cool-ascii-faces": "~1.3.x",
+    "express": "~4.9.x",
+    "socket.io": "0.9",
+    "body-parser": "~1.0.1",
+    "cookie-parser": "~1.0.1",
+    "express-session": "~1.0.2"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uek06/BeFound"
+  },
+  "keywords": [
+    "node",
+    "heroku",
+    "express"
+  ],
+  "license": "BeFound"
 }

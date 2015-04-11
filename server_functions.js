@@ -15,7 +15,7 @@ exports.initApp = function (paramIO, paramSocket) {
     clientSocket = paramSocket;
     clientSocket.emit('connected');
     // On écoute les évenements de l'host
-    clientSocket.on('viewDataBase', viewDataBase);
+    clientSocket.on('getDataBase', getDataBase);
     clientSocket.on('recupPseudos', recupPseudos);
 
     // On écoute les évenements du player

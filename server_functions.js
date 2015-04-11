@@ -101,11 +101,10 @@ getDataBase = function() {
     var client = new pg.Client(params);
     client.connect();
 
-    var query = client.query("SELECT name FROM \"User\"");
+    var query = client.query("SELECT * FROM \"User\"");
 
     query.on('row', function (row) {
         io.sockets.emit('dataSent',row);
-        //$('#id').text()
     });
 
 };

@@ -79,7 +79,7 @@ var App = {
      * @param data Données sur les utilisateurs
      */
     showUserList : function(data) {
-        $('#userList').append('<div class="user" id="'+data.name+'">'+data.name+'</div>');
+        $('#userList').append('<div class="user" id="'+data.name+'">'+data.name+' connecté ? '+data.connected+'</div>');
     },
 
 
@@ -114,3 +114,14 @@ var App = {
 
     IO.init();
     App.init();
+
+function process(event) {
+
+    var x = Math.round(event.acceleration.x);
+    var y = Math.round(event.acceleration.y);
+    var z = Math.round(event.acceleration.z);
+    IO.sockets.emit('checkMouvement');
+}
+if (window.DeviceOrientationEvent) {
+    window.addEventListener("orientation", process, true);
+}

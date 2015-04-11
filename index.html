@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-    <title>Grid Template for Bootstrap</title>
+    <title>BeFound</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/styles.css" rel="stylesheet">
@@ -27,7 +27,7 @@
     <div id="loginModal" class="modal show" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-				<div class="row col-md-12 center-block top15 bot15">
+                <div class="row col-md-12 center-block top15 bot15">
                     <img src="images/BeFound.png" class="img-responsive center-block" />
                 </div>
                 <div class="modal-header">
@@ -36,10 +36,10 @@
                 <div class="modal-body">
                     <form class="form col-md-12 center-block">
                         <div class="form-group">
-                            <input type="text" class="form-control input-lg" placeholder="Pseudo">
+                            <input type="text" id='inputPseudo' class="form-control input-lg" placeholder="Pseudo">
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary btn-lg btn-block">Connect</button>
+                            <button type='button' id="btnConnect" class="btn btn-primary btn-lg btn-block">Connect</button>
                         </div>
                     </form>
                 </div>
@@ -49,9 +49,10 @@
     </div>
 </script>
 
+
 <!-- liste des clients -->
 <script id="templateList" type="text/template">
-
+<p>LISTE</p>
 </script>
     <!-- script references -->
     <script src="/socket.io/socket.io.js"></script>

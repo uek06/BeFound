@@ -6,23 +6,20 @@ fs = require('fs');
 
 // Fonction appellée par server.js pour initialiser le jeu
 // exports sert à pouvoir utiliser cette fonction dans un autre fichier (en l'occurence server.js ici)
-exports.initHost = function (paramIO, paramSocket) {
+exports.initApp = function (paramIO, paramSocket) {
     //on sauvegarde le serveur et la socket dans ce fichier
     io = paramIO;
     clientSocket = paramSocket;
     clientSocket.emit('connected');
-
     // On écoute les évenements de l'host
     clientSocket.on('hostCreateNewRoom', hostCreateNewRoom);
     clientSocket.on('hostRoomFull', hostPrepareGame);
     clientSocket.on('hostQuizzCountdownFinished', hostStartQuizz);
-    clientSocket.on('hostMvtCountdownFinished', hostStartMvt);
     clientSocket.on('hostNextRound', hostNextRound);
 
     // On écoute les évenements du player
     clientSocket.on('playerJoinRoom', playerJoinRoom);
     clientSocket.on('playerAnswer', playerAnswer);
-    clientSocket.on('playerRestart', playerRestart);
 };
 
 //quand on a rentré tous les paramètres on va sur la page classique host et cette fonction est appelée
@@ -94,11 +91,8 @@ function oldplayerJoinRoom(data) {
 //on capte ce message quand le player a cliqué sur connect
 // data contient le pseudo
 function playerJoinRoom(data) {
-    //on stocke la référence de la socket du player ici
-    var sock = this;
-
     // on envoie un event au client pour lui dire qu'il a bien rejoint la room
-    io.sockets.emit('playerJoinedRoom', data);
+    this.emit('playerJoinedRoom', data);
 
 }
 

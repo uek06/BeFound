@@ -99,6 +99,7 @@ var App = {
         App.$doc = $(document);
         App.$main = $('#main');
         App.$templateMenu = $('#menu').html();
+        App.$templateList = $('#templateList').html();
         App.$templateJouer = $('#menu-jouer').html();
         App.$templateNbPlayers = $('#menu-nbPlayers').html();
         App.$templateHostGameId = $('#templateHostGameId').html();
@@ -110,11 +111,12 @@ var App = {
     //puis lance la fonction appropriée
     initListeners: function () {
         App.$doc.on('click', '#btnJouer', App.Host.onJouer);
-        App.$doc.on('click', '#btnScores', App.Host.onJoinClick);
+        //App.$doc.on('click', '#btnScores', App.Host.onJoinClick);
         App.$doc.on('click', '#btnMouvement', App.Host.onMouvement);
         App.$doc.on('click', '#btnQuizz', App.Host.onQuizz);
         App.$doc.on('click', '#btn1', App.Host.on1);
-        App.$doc.on('click', '.btn btn-primary btn-lg btn-bloc', App.Player.onPlayerConnect);
+        App.$doc.on('click', '#btnConnect', App.Player.onPlayerConnect);
+
     },
 
 
@@ -288,7 +290,8 @@ var App = {
 
                 }
             }
-        },
+        }
+    },
 
 
         Player: {
@@ -305,7 +308,7 @@ var App = {
             onPlayerConnect: function () {
                 //on collecte les infos à envoyer au serveur
                 var data = {
-                    pseudo: $('.form-control input-lg').val() || 'Anonyme'
+                    //pseudo: $('#inputPseudo').val() || 'Anonyme'
                 };
                 //on envoie donc la room id et le pseudo au serveur
                 IO.socket.emit('playerJoinRoom', data);
@@ -328,9 +331,6 @@ var App = {
                 }
             }
         }
-    }
-
-
 
 };
 

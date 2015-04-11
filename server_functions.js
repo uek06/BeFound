@@ -11,9 +11,8 @@ exports.initApp = function (paramIO, paramSocket) {
     clientSocket = paramSocket;
     clientSocket.emit('connected');
     // On écoute les évenements de l'host
-    clientSocket.on('hostCreateNewRoom', hostCreateNewRoom);
+    //clientSocket.on('hostCreateNewRoom', hostCreateNewRoom);
 
     // On écoute les évenements du player
-    clientSocket.on('playerJoinRoom', playerJoinRoom);
-    clientSocket.on('playerAnswer', playerAnswer);
+    //clientSocket.on('playerJoinRoom', playerJoinRoom);
 };

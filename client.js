@@ -15,6 +15,7 @@ var IO = {
         IO.socket.on('playerJoinedRoom', IO.playerJoinedRoom);
         IO.socket.on('dataSent', App.showUserList);
         IO.socket.on('alreadyChosen', App.alreadyChosen);
+        IO.socket.on('messageAlert', App.messageAlert);
     },
 
     /**
@@ -91,6 +92,10 @@ var App = {
         IO.socket.emit('recupPseudos',pseudo);
     },
 
+    messageAlert : function(){
+        alert("DKSNNDFKJDSBFKDSJFSK/HFDHJSknbn");
+    },
+
 
     /**
      * fonction qui va permettre, en fonction du booleen,
@@ -115,13 +120,9 @@ var App = {
     IO.init();
     App.init();
 
-function process(event) {
+function lostHandler(e){
+    IO.socket.emit('lost');
+}
 
-    var x = Math.round(event.acceleration.x);
-    var y = Math.round(event.acceleration.y);
-    var z = Math.round(event.acceleration.z);
-    IO.sockets.emit('checkMouvement');
-}
-if (window.DeviceOrientationEvent) {
-    window.addEventListener("orientation", process, true);
-}
+//register listener
+navigator.wakeLock.onlost = lostHandler;

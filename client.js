@@ -105,7 +105,7 @@ var App = {
         else {
             App.$main.html(App.$templateList);
             IO.socket.emit('getDataBase');
-            setTimeout(App.initListeners,2500);
+            setTimeout(App.initListeners,5000);
         }
     }
 

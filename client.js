@@ -43,12 +43,11 @@ var IO = {
         App.Host.gameInit(data);
     },
 
-    //un joueur (sur mobile) a rejoint la room, on va donc mettre à jour l'écran du navigateur de l'host
-    //data contient le room id et le pseudo
+    //un client s'est connecté, on va donc lui changer le template
+    //data contient le pseudo
     playerJoinedRoom: function (data) {
-        //il y a 2 versions de la fonction updateWaitingScreen, 1 pour l'host et 1 pour le player
-        //par ex, pour l'host ce sera App.Host.updateWaitingScreen qui sera appelé
-        App[App.myRole].updateWaitingScreen(data);
+        App.$main.html(App.$templateList);
+        //App[App.myRole].updateWaitingScreen(data);
     },
 
     //le serveur nous confirme que tout le monde a rejoint la room, on lance le compte à rebour
@@ -91,8 +90,6 @@ var App = {
     init: function () {
         App.initVariables();
         App.$main.html(App.$templateMenu);
-        App.doTextFit('#btnScores');
-        App.doTextFit('#btnJouer');
         App.initListeners();
 
     },

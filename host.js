@@ -65,9 +65,9 @@ function hostNextRound(data) {
     }
 }
 
-//on capte ce message quand le player a cliqué sur commencer
-// data contient le room id et le pseudo
-function playerJoinRoom(data) {
+//on capte ce message quand le player a cliqué sur connect
+// data contient le pseudo
+function oldplayerJoinRoom(data) {
     //on stocke la référence de la socket du player ici
     var sock = this;
 
@@ -89,6 +89,17 @@ function playerJoinRoom(data) {
         //si la room n'existe pas, on envoie un message d'erreur
         this.emit('error', {message: "NUMERO DE JEU INCORRECT"});
     }
+}
+
+//on capte ce message quand le player a cliqué sur connect
+// data contient le pseudo
+function playerJoinRoom(data) {
+    //on stocke la référence de la socket du player ici
+    var sock = this;
+
+    // on envoie un event au client pour lui dire qu'il a bien rejoint la room
+    io.sockets.emit('playerJoinedRoom', data);
+
 }
 
 //on recoit la réponse proposée par le player

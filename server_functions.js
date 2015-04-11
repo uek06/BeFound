@@ -65,7 +65,7 @@ checkPseudo = function(pseudo) {
     }
     if (!isAlreadyChosen) addPseudoInDB(pseudo);
     io.sockets.emit("alreadyChosen",isAlreadyChosen);
-    users.flush();
+    users = [];
 };
 
 

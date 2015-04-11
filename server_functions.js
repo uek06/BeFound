@@ -22,6 +22,13 @@ exports.initApp = function (paramIO, paramSocket) {
     //clientSocket.on('playerJoinRoom', playerJoinRoom);
 };
 
+
+/**
+ * Parcours la base de données et ajoute les utilisateurs dans
+ * un tableau users en variable globale.
+ *
+ * @param pseudo Le pseudo rentré par l'utilisateur
+ */
 recupPseudos = function(pseudo) {
     var params = {
         host: 'ec2-54-163-225-82.compute-1.amazonaws.com',
@@ -43,6 +50,13 @@ recupPseudos = function(pseudo) {
     setTimeout(function() {checkPseudo(pseudo)},2500);
 };
 
+/**
+ * Vérifie si un pseudo est déjà existant dans la base de donnée.
+ * On demandera à la vue d'afficher un message suivant si le booleen
+ * (true si déjà existant) est à true ou false.
+ *
+ * @param pseudo Le pseudo rentré par l'utilisateur
+ */
 checkPseudo = function(pseudo) {
     var isAlreadyChosen = false;
     for (var i=0; i<users.length; i++) {
@@ -50,9 +64,14 @@ checkPseudo = function(pseudo) {
         if (users[i] == pseudo) isAlreadyChosen = true;
     }
     io.sockets.emit("alreadyChosen",isAlreadyChosen);
-
+    users.flush();
 };
 
+
+/**
+ * Permet de récupérer les noms des utilisateurs et demande au client
+ * de les afficher
+ */
 viewDataBase = function() {
 
     var params = {

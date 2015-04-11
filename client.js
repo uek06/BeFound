@@ -62,20 +62,41 @@ var App = {
 
     },
 
+    /**
+     * Méthode appelée lorsque l'on appui sur le bouton de connection.
+     */
     onButtonConnect : function() {
         App.getPseudoInForm();
     },
 
+    /**
+     * Va afficher tout les utilisateurs utilisant l'application.
+     *
+     * @param data Données sur les utilisateurs
+     */
     showUserList : function(data) {
         var contenu = $('#userList').text();
         $('#userList').html(contenu + "<div id=\""+data.name+"\">"+data.name+"</div>");
     },
 
+
+    /**
+     * Récupère le pseudo entré par l'utilisateur.
+     */
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
         IO.socket.emit('recupPseudos',pseudo);
     },
 
+
+    /**
+     * fonction qui va permettre, en fonction du booleen,
+     * d'afficher un message si le pseudo est déjà pris
+     * (boolean a false) sinon va afficher la liste des
+     * utilisateurs.
+     *
+     * @param isAlreadyChosen Boolean dont la valeur est définie dans le serveur
+     */
     alreadyChosen : function(isAlreadyChosen) {
         if(isAlreadyChosen)
             $("#alreadyChosen").text("Ce pseudo est déjà pris !");

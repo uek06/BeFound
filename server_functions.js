@@ -72,7 +72,7 @@ checkPseudo = function(pseudo) {
         if (users[i] == pseudo) isAlreadyChosen = true;
     }
     if (!isAlreadyChosen) addPseudoInDB(pseudo);
-    io.sockets.emit("alreadyChosen",isAlreadyChosen);
+    setTimeout(function() {io.sockets.emit("alreadyChosen",isAlreadyChosen); },5000);
     users = [];
 };
 

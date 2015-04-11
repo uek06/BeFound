@@ -55,17 +55,18 @@ var App = {
         App.$templateList = $('#templateList').html();
     },
 
-    //initialise les différents listeners qui vont écouter les évènements émis par le serveur socket
-    //puis lance la fonction appropriée
+    //initialise les différents listeners pour les users
     initListeners: function () {
-
+        $(".user").each(function() {
+            App.$doc.on('click', '#Ugo', App.onButtonConnect($(this).text()));
+        });
     },
 
     /**
      * Méthode appelée lorsque l'on appui sur le bouton de connection.
      */
-    onButtonConnect : function() {
-        App.getPseudoInForm();
+    onButtonConnect : function(pseudo) {
+        //alert(pseudo);
     },
 
     /**
@@ -75,13 +76,13 @@ var App = {
      */
     showUserList : function(data) {
         var contenu = $('#userList').text();
-        $('#userList').html(contenu + "<div id=\""+data.name+"\">"+data.name+"</div>");
+        $('#userList').html(contenu + '<div class="user" id="'+data.name+'">'+data.name+'</div>');
     },
 
 
     /**
      * Récupère le pseudo entré par l'utilisateur.
-     */
+    */
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
         IO.socket.emit('recupPseudos',pseudo);

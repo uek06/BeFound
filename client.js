@@ -173,7 +173,7 @@ var App = {
     },
 
     meetMe : function(lat,lon,myPseudo) {
-        target = myPseudo;
+        //target = myPseudo;
         App.$main.html(App.$templateLocalisation);
         $('#latlng').html(lat+'</br>'+lon);
     },
@@ -239,7 +239,7 @@ function initLocalisation() {
             lon = position.coords.longitude;
         }
         IO.socket.emit('sendLatLon',lat,lon,target,myPseudo);
-        $('#latlng').html(position.coords.latitude + "</br>" + position.coords.longitude)
+        //$('#latlng').html(position.coords.latitude + "</br>" + position.coords.longitude)
     }
 
     function errorCallback(error){

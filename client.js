@@ -61,12 +61,18 @@ var App = {
         App.$templateMenu = $('#menu').html();
         App.$templateList = $('#templateList').html();
         App.$tchat = $('#tchat').html();
+        App.$templateLocalisation = $('#localisation').html();
     },
 
     onTchatUser: function(friend){
         App.$main.html(App.$tchat);
         target = friend;
         IO.socket.emit('talk',friend,myPseudo);
+    },
+
+    onLocalisation: function(friend){
+        App.$main.html(App.$templateLocalisation);
+        target = friend;
     },
 
     /**
@@ -108,8 +114,8 @@ var App = {
             '<a role="button">' +
             '<div class="row">' +
             '<div style="text-align:center" class="col-md-4"><h2>' + pseudo + '</h2></div>' +
-            '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-            '<button id="'+ pseudo +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+            '<div class="col-md-4"><button id="localisation'+users[i].name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+            '<button id="tchat'+ pseudo +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
             '<div class="col-md-4"></div>' +
             '</div>' +
             '</a>');
@@ -125,8 +131,8 @@ var App = {
                     '<a role="button">' +
                     '<div class="row">' +
                     '<div style="text-align:center" class="col-md-4"><h2>' + users[i].name + '</h2></div>' +
-                    '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                    '<button id="' + users[i].name + '" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                    '<div class="col-md-4"><button id="localisation'+users[i].name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                    '<button id="tchat' + users[i].name + '" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
                     '<div class="col-md-4"><h2><span class="label label-success">Connecté <div class="glyphicon glyphicon-ok"></div></span></h2></div>' +
                     '</div>' +
                     '</a>');
@@ -136,8 +142,8 @@ var App = {
                     '<a role="button">' +
                     '<div class="row">' +
                     '<div style="text-align:center" class="col-md-4"><h2>' + users[i].name + '</h2></div>' +
-                    '<div class="col-md-4"><button type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
-                    '<button id="'+ users[i].name +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
+                    '<div class="col-md-4"><button id="localisation'+users[i].name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+                    '<button id="tchat'+ users[i].name +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
                     '<div class="col-md-4"></div>' +
                     '</div>' +
                     '</a>');
@@ -148,7 +154,8 @@ var App = {
 
     createListener : function(pseudo) {
         // Ajout du listener
-        App.$doc.on('click', '#'+pseudo, function() {App.onTchatUser(pseudo)});
+        App.$doc.on('click', '#tchat'+pseudo, function() {App.onTchatUser(pseudo)});
+        App.$doc.on('click', '#localisation'+pseudo, function() {App.onLocalisation(pseudo)});
     },
 
 

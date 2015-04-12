@@ -3,6 +3,7 @@ var io;
 // La socket du client
 var clientSocket;
 var pg = require('pg');
+var ent = require('ent');
 
 // Tableau des utilisateurs inscrits à l'évènement
 users = [];
@@ -19,14 +20,19 @@ exports.initApp = function (paramIO, paramSocket) {
     clientSocket.emit('connected');
     // On écoute les évenements de l'host
     clientSocket.on('recupPseudos', recupPseudos);
-    clientSocket.on('lost',lost);
+    clientSocket.on('talk',talk);
+    clientSocket.on('newMessage',newMessage);
 
     // On écoute les évenements du player
     //clientSocket.on('playerJoinRoom', playerJoinRoom);
 };
 
-lost = function(){
-    io.sockets.emit('messageAlert');
+talk = function(friend,myPseudo){
+    io.sockets.in(friend).emit('launchTchat',myPseudo);
+};
+
+newMessage = function(message,target) {
+    io.sockets.in(target).emit('sendMessage',message);
 };
 
 
@@ -65,6 +71,7 @@ recupPseudos = function(pseudo) {
  * @param pseudo Le pseudo rentré par l'utilisateur
  */
 checkPseudo = function(pseudo) {
+    pseudo = ent.encode(pseudo);
     var isAlreadyChosen = false;
     for (var i=0; i<users.length; i++) {
         // Si il existe déjà

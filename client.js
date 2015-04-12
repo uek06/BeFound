@@ -1,4 +1,5 @@
-
+var target = "";
+var myPseudo = "";
 // Tout le code qui concerne les connections socket
 var IO = {
 
@@ -18,6 +19,8 @@ var IO = {
         IO.socket.on('updateDisplay',App.updateDisplay);
         IO.socket.on('firstDisplay',App.firstDisplay);
         IO.socket.on('createListener',App.createListener);
+        IO.socket.on('launchTchat',App.launchTchat);
+        IO.socket.on('sendMessage',App.sendMessage);
     },
 
     /**
@@ -48,6 +51,7 @@ var App = {
         App.initVariables();
         App.$main.html(App.$templateMenu);
         App.$doc.on('click', '#btnConnect', App.onButtonConnect);
+        App.$doc.on('click','#btn_tchat',App.onButtonTchat);
     },
 
     //initialise les variables utilisées pour définir les différents templates
@@ -56,10 +60,13 @@ var App = {
         App.$main = $('#main');
         App.$templateMenu = $('#menu').html();
         App.$templateList = $('#templateList').html();
+        App.$tchat = $('#tchat').html();
     },
 
-    onUser: function(pseudo){
-        alert('ok '+pseudo);
+    onTchatUser: function(friend){
+        App.$main.html(App.$tchat);
+        target = friend;
+        IO.socket.emit('talk',friend,myPseudo);
     },
 
     /**
@@ -75,11 +82,8 @@ var App = {
      */
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
+        myPseudo = pseudo;
         IO.socket.emit('recupPseudos',pseudo);
-    },
-
-    messageAlert : function(){
-        alert("DKSNNDFKJDSBFKDSJFSK/HFDHJSknbn");
     },
 
 
@@ -141,8 +145,30 @@ var App = {
 
     createListener : function(pseudo) {
         // Ajout du listener
-        App.$doc.on('click', '#'+pseudo, function() {App.onUser(pseudo)});
+        App.$doc.on('click', '#'+pseudo, function() {App.onTchatUser(pseudo)});
+    },
+
+
+    onButtonTchat : function() {
+        var message = $('#msg').val();
+        IO.socket.emit('newMessage',message,target);
+        App.showMessage(message);
+    },
+
+    launchTchat : function(myPseudo) {
+        target = myPseudo;
+        App.$main.html(App.$tchat);
+    },
+
+    sendMessage : function(message) {
+        $('#zone_tchat').prepend('<p><strong>' + target + ": " + '</strong>' + message +'\n</p>');
+    },
+
+    showMessage : function(message) {
+        $('#zone_tchat').prepend('<p><strong>' + myPseudo + ": " + '</strong>' + message +'\n</p>');
     }
+
+
 
 };
 

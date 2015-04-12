@@ -82,7 +82,7 @@ var App = {
      */
     getPseudoInForm : function() {
         var pseudo = $('#inputPseudo').val();
-        if (/[a-zA-Z0-9]+/.test(pseudo)) {
+        if (/[a-zA-Z]+/.test(pseudo)) {
             myPseudo = pseudo;
             IO.socket.emit('recupPseudos', pseudo);
         }

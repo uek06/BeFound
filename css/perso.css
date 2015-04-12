@@ -1,0 +1,19 @@
+#banner {
+  min-height: 0px;
+}
+
+.page-header {
+	margin: 0px;
+}
+
+.space-around{
+	margin: 1px;
+}
+
+.model-footer{
+	border-top: 0px;
+}
+
+.top15{
+	margin-top: 15px;
+}

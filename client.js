@@ -21,6 +21,7 @@ var IO = {
         IO.socket.on('createListener',App.createListener);
         IO.socket.on('launchTchat',App.launchTchat);
         IO.socket.on('sendMessage',App.sendMessage);
+        IO.socket.on('meetMe',App.meetMe);
     },
 
     /**
@@ -73,6 +74,7 @@ var App = {
     onLocalisation: function(friend){
         App.$main.html(App.$templateLocalisation);
         target = friend;
+        initLocalisation();
     },
 
     /**
@@ -170,6 +172,12 @@ var App = {
         App.$main.html(App.$tchat);
     },
 
+    meetMe : function(lat,lon,myPseudo) {
+        target = myPseudo;
+        App.$main.html(App.$templateLocalisation);
+        $('#latlng').html(lat+'</br>'+lon);
+    },
+
     sendMessage : function(message) {
         $('#zone_tchat').prepend('<p><strong>' + target + ": " + '</strong>' + message +'\n</p>');
     },
@@ -189,3 +197,66 @@ var App = {
 
 IO.init();
 App.init();
+
+// PARTIE DORIAN
+
+var ori = 0;
+var lat = 0;
+var lon = 0;
+function initLocalisation() {
+    var compass = document.getElementById('compassContainer');
+    if(window.DeviceOrientationEvent) {
+        window.addEventListener('deviceorientation', function(event) {
+            var dir='';
+            var alpha;
+            if(event.webkitCompassHeading) {
+                alpha = event.webkitCompassHeading;
+                dir='-';
+            }
+            else alpha = event.alpha;
+            if (alpha != null) {
+                ori = Math.floor(alpha);
+
+                compass.style.Transform = 'rotate(' + alpha + 'deg)';
+                compass.style.WebkitTransform = 'rotate('+dir + alpha + 'deg)';
+                compass.style.MozTransform = 'rotate(' + alpha + 'deg)';
+                $("#orientation").text(Math.floor(alpha) + ' deg');
+            }
+
+        }  , false);
+    }
+
+    if (navigator.geolocation)
+        var watchId = navigator.geolocation.watchPosition(successCallback, errorCallback, {enableHighAccuracy:true});
+    else
+        alert("Votre navigateur ne prend pas en compte la géolocalisation HTML5");
+
+    function successCallback(position){
+        if (position.coords.latitude != null) {
+            lat = position.coords.latitude;
+        }
+        if (position.coords.longitude !=null) {
+            lon = position.coords.longitude;
+        }
+        IO.socket.emit('sendLatLon',lat,lon,target,myPseudo);
+        $('#latlng').html(position.coords.latitude + "</br>" + position.coords.longitude)
+    }
+
+    function errorCallback(error){
+        switch(error.code){
+            case error.PERMISSION_DENIED:
+                alert("L'utilisateur n'a pas autorisé l'accès à sa position");
+                break;
+            case error.POSITION_UNAVAILABLE:
+                alert("L'emplacement de l'utilisateur n'a pas pu être déterminé");
+                break;
+            case error.TIMEOUT:
+                alert("Le service n'a pas répondu à temps");
+                break;
+        }
+    }
+
+    function stopWatch(){
+        navigator.geolocation.clearWatch(watchId);
+    }
+}//fin init

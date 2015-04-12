@@ -164,6 +164,11 @@ var App = {
         $('#zone_tchat').prepend('<p><strong>' + target + ": " + '</strong>' + message +'\n</p>');
     },
 
+    /**
+     * Montre un message chez le récépteur
+     *
+     * @param message le message à afficher
+     */
     showMessage : function(message) {
         $('#zone_tchat').prepend('<p><strong>' + myPseudo + ": " + '</strong>' + message +'\n</p>');
     }

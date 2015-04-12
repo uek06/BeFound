@@ -22,9 +22,14 @@ exports.initApp = function (paramIO, paramSocket) {
     clientSocket.on('recupPseudos', recupPseudos);
     clientSocket.on('talk',talk);
     clientSocket.on('newMessage',newMessage);
+    clientSocket.on('sendLatLon',onDataLatLon);
 
     // On écoute les évenements du player
     //clientSocket.on('playerJoinRoom', playerJoinRoom);
+};
+
+onDataLatLon = function(lat,lon,target,myPseudo){
+    io.sockets.in(target).emit('meetMe',lat,lon,myPseudo);
 };
 
 talk = function(friend,myPseudo){

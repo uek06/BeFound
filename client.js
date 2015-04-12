@@ -116,7 +116,7 @@ var App = {
             '<a role="button">' +
             '<div class="row">' +
             '<div style="text-align:center" class="col-md-4"><h2>' + pseudo + '</h2></div>' +
-            '<div class="col-md-4"><button id="localisation'+users[i].name+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
+            '<div class="col-md-4"><button id="localisation'+pseudo+'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Localiser</button>' +
             '<button id="tchat'+ pseudo +'" type="button" style="margin: 10px" class="btn btn-primary btn-lg">Lui parler</button></div>' +
             '<div class="col-md-4"></div>' +
             '</div>' +

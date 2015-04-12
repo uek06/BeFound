@@ -17,3 +17,15 @@
 .top15{
 	margin-top: 15px;
 }
+
+ .compassContainer{
+     transform-origin: 50% 50%;
+     -webkit-transform-origin: 50% 50%;
+     -moz-transform-origin: 50% 50%;
+ }
+
+.block_img{
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
